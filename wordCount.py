@@ -1,23 +1,34 @@
 #! /usr/bin/env python3
-import sys
 import os
 import re
+import sys
 
-# setting cmdLine arguments for file names
-textFile = sys.argv[1]
-outputFile = sys.argv[2]
+def main():
+    # setting cmdLine arguments for file names
+    textFile = sys.argv[1]
+    outputFile = sys.argv[2]
 
-readText = open(textFile).read()
+    # parse input file
+    readText = open(textFile).read()
+    wordList = readText.lower().split()
+    wordSet = set(wordList)
+    # sorted(wordSet)
+    # print(sorted(wordSet))
 
-wordList = readText.split()
-wordSet = set(wordList)
+    createOutputFile(outputFile)
+
+    # exclude punctuation and whitespace
+    for w in wordSet:
+        w = re.sub(r"[^a-z0-9]","", w)
+        print(w, ": ", wordList.count(w))
+
+        with open(outputFile, "a") as f:
+            f.write("%s: %d\n" % (w, wordList.count(w)))
+            f.close()
 
 # create output file
-if not os.path.exists(outputFile):
-    with open(outputFile, 'w'): pass
+def createOutputFile(outputFile):
+    if not os.path.exists(outputFile):
+        with open(outputFile, 'w'): pass
 
-for w in wordSet:
-    w = re.sub(r"[^a-z0-9]","", w.lower())
-
-    print(w, ": ", wordList.count(w))
-
+main()
