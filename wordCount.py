@@ -1,6 +1,6 @@
-#! /usr/bin/env python3
 import os
 import re
+import string
 import sys
 
 def main():
@@ -9,26 +9,30 @@ def main():
     outputFile = sys.argv[2]
 
     # parse input file
-    readText = open(textFile).read()
-    wordList = readText.lower().split()
-    wordSet = set(wordList)
-    # sorted(wordSet)
-    # print(sorted(wordSet))
-
-    createOutputFile(outputFile)
+    readText = open(textFile, 'r')
+    convertText = readText.read().lower()
 
     # exclude punctuation and whitespace
-    for w in wordSet:
-        w = re.sub(r"[^a-z0-9]","", w)
-        print(w, ": ", wordList.count(w))
+    wordList = re.findall(r'[a-z0-9]+', convertText)
+    tracker = {}
+    
+    # search for the word and increase counter
+    for w in wordList:
+        numOfWords = tracker.get(w, 0)
+        tracker[w] = numOfWords + 1
+    
+    # retrieve all keys in dictionary
+    trackerList = sorted(tracker.keys())
+    
+    # write results to file
+    with open(outputFile, "w") as f:
 
-        with open(outputFile, "a") as f:
-            f.write("%s: %d\n" % (w, wordList.count(w)))
-            f.close()
+        # print results
+        for w in trackerList:
+            # print("%s: %d" % (w, tracker[w]))
 
-# create output file
-def createOutputFile(outputFile):
-    if not os.path.exists(outputFile):
-        with open(outputFile, 'w'): pass
+            f.write("%s %d\n" % (w, tracker[w]))
+        
+    f.close()
 
 main()
