@@ -29,3 +29,5 @@ differences with the key file. An example use is:
 
 The re regular expression library and python dictionaries should be
 used in your program. 
+
+Written with the help of [this article](https://code.tutsplus.com/tutorials/counting-word-frequency-in-a-file-using-python--cms-25965)
